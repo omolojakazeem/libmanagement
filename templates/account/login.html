@@ -7,9 +7,8 @@
 <body>
   <form method="post">
     {% csrf_token %}
-    {{form1.as_p}}
-    {{form2.as_p}}
-      <button class="btn btn-primary" name="submit_btn">Register</button>
+    {{user_form.as_p}}
+      <button class="btn btn-primary" name="submit_btn">Login</button>
   </form>
 </body>
 </html>

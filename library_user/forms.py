@@ -5,15 +5,19 @@ from .models import LibraryUser
 
 
 class UserCreateForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['first_name', 'last_name', 'email', 'username', 'password']
 
 
 class LibraryUserCreateForm(forms.ModelForm):
-    student_id = forms.CharField(required=False)
-    department = forms.CharField(required=False)
-
     class Meta:
         model = LibraryUser
-        fields = ['student_id', 'staff_id', 'department']
+        fields = ['staff_id', ]
+
+
+class UserLogin(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)

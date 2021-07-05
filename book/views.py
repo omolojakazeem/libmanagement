@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import BookCategoryCreateForm, BookForm
+from .models import Book, BookCategory
 
 
 def index(request):
@@ -8,6 +9,35 @@ def index(request):
 
     }
     return render(request, template_name=template, context=context)
+
+
+def book_index(request):
+    template = 'book/book_index.html'
+    books = Book.objects.all()
+    book_category = BookCategory.objects.all()
+    context = {
+        'books': books,
+        'categories': book_category,
+    }
+    return render(request, template_name=template, context=context)
+
+
+def create_category(request):
+
+    if request.method == 'GET':
+        category_form = BookCategoryCreateForm()
+        template = 'book/create_category.html'
+        context = {
+            'category_form': category_form,
+        }
+        return render(request, template_name=template, context=context)
+    elif request.method == 'POST':
+        category_form = BookCategoryCreateForm(request.POST)
+        if category_form.is_valid():
+            category_form.save()
+            return redirect('book:book_index')
+        else:
+            return redirect('book:book_category_create')
 
 
 def create_book(request):
