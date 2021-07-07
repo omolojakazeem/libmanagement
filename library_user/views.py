@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import UserCreateForm, LibraryUserCreateForm, UserLogin
@@ -31,7 +31,7 @@ def registration(request):
             return HttpResponse("Invalid Data")
 
 
-def login(request):
+def login_view(request):
     template = 'account/login.html'
 
     if request.method == 'POST':
@@ -39,7 +39,9 @@ def login(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
+
         if user:
+            login(request, user)
             return redirect('book:book_index')
         else:
             return HttpResponse('Invalid Login')
@@ -48,3 +50,8 @@ def login(request):
         'user_form': user_form,
     }
     return render(request, template_name=template, context=context)
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('book:book_index')

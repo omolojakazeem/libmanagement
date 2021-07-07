@@ -12,7 +12,7 @@ def index(request):
 
 
 def book_index(request):
-    template = 'book/book_index.html'
+    template = 'book/my_book_index.html'
     books = Book.objects.all()
     book_category = BookCategory.objects.all()
     context = {
