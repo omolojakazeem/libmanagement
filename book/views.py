@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import BookCategoryCreateForm, BookForm
 from .models import Book, BookCategory
@@ -22,8 +23,36 @@ def book_index(request):
     return render(request, template_name=template, context=context)
 
 
-def create_category(request):
+def book_detail(request, book_id):
+    template = 'book/book_detail.html'
+    if request.method == 'GET':
+        book = Book.objects.get(id=book_id)
+        book_form = BookForm(instance=book)
+        context = {
+            'book': book,
+            'book_form': book_form,
+        }
 
+        return render(request, template_name=template, context=context)
+
+    if request.method == 'POST':
+        book = Book.objects.get(id=book_id)
+        book_form = BookForm(request.POST, instance=book)
+        if book_form.is_valid():
+            book_form.save()
+            return redirect('book:book_detail', book.id)
+        else:
+            return HttpResponse("Error in Form Submission")
+
+
+def delete_book(request, book_id):
+    book = Book.objects.get(id=book_id)
+    book.delete()
+    return redirect('book:book_index')
+
+
+
+def create_category(request):
     if request.method == 'GET':
         category_form = BookCategoryCreateForm()
         template = 'book/create_category.html'

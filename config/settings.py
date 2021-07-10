@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'book',
+    'student',
     'library_user',
     'widget_tweaks',
 ]
