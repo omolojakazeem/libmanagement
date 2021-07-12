@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import BookCategoryCreateForm, BookForm
+from .forms import BookCategoryCreateForm, BookForm, BorrowedBookForm
 from .models import Book, BookCategory
 
 
@@ -28,28 +28,39 @@ def book_detail(request, book_id):
     if request.method == 'GET':
         book = Book.objects.get(id=book_id)
         book_form = BookForm(instance=book)
+        borrow_book_form = BorrowedBookForm()
         context = {
             'book': book,
             'book_form': book_form,
+            'borrow_book_form': borrow_book_form,
         }
 
         return render(request, template_name=template, context=context)
 
     if request.method == 'POST':
         book = Book.objects.get(id=book_id)
-        book_form = BookForm(request.POST, instance=book)
-        if book_form.is_valid():
-            book_form.save()
-            return redirect('book:book_detail', book.id)
+        if 'borrow_book' in request.POST:
+            borrow_book_form = BorrowedBookForm(request.POST)
+            if borrow_book_form.is_valid():
+                borrow_book_form.save()
+                book.inventory -= 1
+                book.save()
+                return redirect('book:book_detail', book.id)
+            else:
+                return HttpResponse("Error in Form Submission")
         else:
-            return HttpResponse("Error in Form Submission")
+            book_form = BookForm(request.POST, instance=book)
+            if book_form.is_valid():
+                book_form.save()
+                return redirect('book:book_detail', book.id)
+            else:
+                return HttpResponse("Error in Form Submission")
 
 
 def delete_book(request, book_id):
     book = Book.objects.get(id=book_id)
     book.delete()
     return redirect('book:book_index')
-
 
 
 def create_category(request):
@@ -87,3 +98,6 @@ def create_book(request):
             return redirect('book:book_index')
         else:
             return redirect('book:book_create')
+
+
+

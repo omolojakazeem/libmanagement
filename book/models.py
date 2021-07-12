@@ -1,5 +1,7 @@
 from django.db import models
 
+from student.models import Student
+
 
 class BookCategory(models.Model):
     category_name = models.CharField(max_length=20)
@@ -20,3 +22,13 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class BorrowedBook(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    timestamp = models.DateField(auto_now_add=True)
+    expected_return = models.DateField()
+
+    def __str__(self):
+        return self.book.title

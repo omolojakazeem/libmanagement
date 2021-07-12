@@ -1,0 +1,40 @@
+{% extends 'snippets/base.html' %}
+{% load widget_tweaks %}
+
+{% block hero_content %}
+
+<div class="col-sm-3" >
+</div>
+<div class="col-sm-6" style="border-style:solid;">
+    <h4>Register a Student</h4>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>
+            {% render_field student_form.first_name class="form-control" placeholder="First Name" %}
+        </p>
+
+       <p>
+           {% render_field student_form.last_name class="form-control" placeholder="Last Name" %}
+       </p>
+
+        <p>
+           {% render_field student_form.date_of_birth class="form-control"  placeholder="Date of Birth"%}
+       </p>
+        <p>
+           {% render_field student_form.sex class="form-control" %}
+       </p>
+        <p>
+           {% render_field student_form.student_id class="form-control" placeholder="Student ID"%}
+       </p>
+
+        <p>
+            {% render_field book_form.inventory class="form-control" placeholder="Inventory" %}
+       </p>
+
+        <!-- {{book_form.as_p}} -->
+        <button class="btn btn-primary" type="submit">Create</button>
+    </form>
+</div>
+<div class="col-sm-3" >
+</div>
+{% endblock %}

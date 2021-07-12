@@ -17,6 +17,10 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteBookModal">Delete</button>
                 </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#borrowBookModal">Borrow</button>
+                </div>
                     <small class="text-muted">No. of pages: {{book.number_of_pages}}</small>
                     <small class="text-muted">Remaining: {{book.inventory}}</small>
                 </div>
@@ -72,7 +76,44 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="deleteBookModal" tabindex="-1" aria-labelledby="editBookModal" aria-hidden="true">
+<div class="modal fade" id="borrowBookModal" tabindex="-1" aria-labelledby="borrowBookModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{book.title}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form action="" method="post">
+              {% csrf_token %}
+              <div class="row">
+                  <div class="col-sm-3"><label for="">{{borrow_book_form.student.label}}:</label></div>
+                  <div class="col-sm-9">{% render_field borrow_book_form.student class="form-control" %}</div>
+              </div>
+              <hr>
+              <div class="row">
+                   <div class="col-sm-3"><label for="">{{borrow_book_form.book.label}}:</label></div>
+                  <div class="col-sm-9">
+                      <select name="book" id="" class = "form-control">
+                          <option value="{{book.id}}">{{book}}</option>
+                      </select>
+                  </div>
+              </div>
+              <hr>
+              <div class="row">
+                  <div class="col-sm-3"><label for="">{{borrow_book_form.expected_return.label}}:</label></div>
+                  <div class="col-sm-9">{% render_field borrow_book_form.expected_return class="form-control"%}</div>
+              </div>
+              <hr>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" name="borrow_book" class="btn btn-primary">Save changes</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="deleteBookModal" tabindex="-1" aria-labelledby="deleteBookModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -87,7 +128,6 @@
     </div>
   </div>
 </div>
-
 
 {% endblock %}
 

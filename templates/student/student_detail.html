@@ -1,0 +1,104 @@
+{% extends 'snippets/base.html' %}
+{% load widget_tweaks %}
+{% block hero_content %}
+
+<div class="col-sm-9" style="border-style:solid;">
+    <h4>{{book.title}} </h4>
+    <div class="card shadow-sm">
+        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+        <div class="card-body">
+            <p class="card-text">Name: <a href="{% url 'student:student_detail' student.pk %}">{{student}}</a></p>
+            <p class="card-text">Id Number: {{student.student_id}}</p>
+            <p class="card-text">Id Number: {{student.sex}}</p>
+            <h4>Borrowed Books</h4>
+            <ul>
+                {% for my_book in books_borrowed %}
+                    <li>{{my_book}} - {{my_book.expected_return}}</li>
+                {% endfor %}
+            </ul>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#editBookModal">Edit</button>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteBookModal">Delete</button>
+                </div>
+            </div>
+        </div>
+</div>
+<div class="modal fade" id="editBookModal" tabindex="-1" aria-labelledby="editBookModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{book.title}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form action="" method="post">
+              {% csrf_token %}
+              <div class="row">
+                  <div class="col-sm-3"><label for="">{{student_form.first_name.label}}:</label></div>
+                  <div class="col-sm-9">{% render_field student_form.first_name class="form-control" %}</div>
+              </div>
+              <hr>
+              <div class="row">
+                  <div class="col-sm-3"><label for="">{{student_form.last_name.label}}:</label></div>
+                  <div class="col-sm-9">{% render_field student_form.last_name class="form-control"%}</div>
+              </div>
+              <hr>
+              <div class="row">
+                  <div class="col-sm-3"><label for="">{{student_form.sex.label}}:</label></div>
+                  <div class="col-sm-9">{% render_field student_form.sex class="form-control"%}</div>
+              </div>
+              <hr>
+              <div class="row">
+                  <div class="col-sm-3"><label for="">{{student_form.date_of_birth.label}}:</label></div>
+                  <div class="col-sm-9">{% render_field student_form.date_of_birth class="form-control"%}</div>
+              </div>
+              <hr>
+              <div class="row">
+                  <div class="col-sm-3"><label for="">{{student_form.student_id.label}}:</label></div>
+                  <div class="col-sm-9">{% render_field student_form.student_id class="form-control"%}</div>
+              </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="deleteBookModal" tabindex="-1" aria-labelledby="editBookModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{student}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p>Are you sure you want to delete this book? - {{student}}</p>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="{% url 'student:delete_student' student.id %}" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+<!-- Modal -->
+
+<div class="row p-2">
+      <div class="card" style="width: 18rem;">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+</div>
+  </div>
