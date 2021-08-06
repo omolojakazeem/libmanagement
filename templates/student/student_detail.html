@@ -12,11 +12,38 @@
             <p class="card-text">Id Number: {{student.student_id}}</p>
             <p class="card-text">Id Number: {{student.sex}}</p>
             <h4>Borrowed Books</h4>
-            <ul>
+            <table class="table">
+                <tr>
+                    <th>S/N</th>
+                    <th>Book</th>
+                    <th>Expected Return Date</th>
+                    <th>Actions</th>
+                </tr>
                 {% for my_book in books_borrowed %}
-                    <li>{{my_book}} - {{my_book.expected_return}}</li>
+                <tr>
+                    <td>
+                        {{forloop.counter}}
+                    </td>
+
+                    <td>
+                        {{my_book}}
+                    </td>
+                    <td>
+                        {{my_book.expected_return}}
+                    </td>
+
+                    <td>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="book_id" value="{{my_book.book.id}}">
+                            <button name="return_book" class="btn btn-primary">Return</button>
+                        </form>
+
+                    </td>
+                </tr>
                 {% endfor %}
-            </ul>
+            </table>
+
             <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#editBookModal">Edit</button>

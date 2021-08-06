@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from book.models import BorrowedBook
 from .forms import StudentCreateForm
 from .models import Student
+from book.models import Book
 
 
 def student_index(request):
@@ -48,8 +49,19 @@ def student_detail(request, id):
         return render(request, template_name=template, context=context)\
 
     if request.method == 'POST':
+
         student = Student.objects.get(id=id)
-        student_form = StudentCreateForm(request.POST,instance=student)
+        student_form = StudentCreateForm(request.POST, instance=student)
+
+        if 'return_book' in request.POST:
+            book_id = request.POST.get('book_id')
+            book = Book.objects.get(id=book_id)
+            book.inventory += 1
+            book.save()
+            book_borrowed = BorrowedBook.objects.filter(book=book, student=student)
+            book_borrowed.delete()
+            return redirect('student:student_detail', student.id)
+
         if student_form.is_valid():
             student_form.save()
             return redirect('student:student_detail', student.id)
